@@ -2,6 +2,7 @@ package com.demo.librarychallenge.controllers;
 
 
 import com.demo.librarychallenge.models.entity.Film;
+import com.demo.librarychallenge.models.entity.QueryRequest;
 import com.demo.librarychallenge.services.FilmService;
 import com.demo.librarychallenge.services.RequestService;
 import org.springframework.http.ResponseEntity;
@@ -56,16 +57,17 @@ public class FilmController {
         return ResponseEntity.ok("Deleted");
     }
 
-    @GetMapping("/get{title}{recursive}")
-    public ResponseEntity getFilm(@RequestParam String title, @RequestParam(defaultValue = "false") String recursive){
+    @PostMapping("/get{strict}")
+    @ResponseBody
+    public ResponseEntity getFilm(@RequestBody String jsonRequest, @RequestParam(defaultValue = "true") String strict){
         try{
-            List<Film> films = filmService.getFilm(title);
+            QueryRequest queryRequest = filmService.getGson().fromJson(jsonRequest, QueryRequest.class);
+            List<Film> films = filmService.getFilm(queryRequest.getTitle(), strict);
             String response = filmService.convertToString(films);
-            if(recursive.equals("false")){
-                System.out.println(recursive);
-                List<Film> books = requestService.request(title, filmService);
-                films.addAll(books);
-                response = filmService.convertToString(books);
+
+            if(strict.equals("true")){
+                System.out.println(strict);
+                response = filmService.convertToString(filmService.getBooks(requestService, films));
             }
             return ResponseEntity.ok(response);
         }catch (Exception e){

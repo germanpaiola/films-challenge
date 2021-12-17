@@ -52,7 +52,7 @@ public class FilmServiceTest {
 
         queryRequest.setTitle("harry potter");
 
-        List<Film> filmList = service.getFilm(service.convertToString(queryRequest));
+        List<Film> filmList = service.getFilm(service.convertToString(queryRequest), "true");
         Assertions.assertEquals(3, filmList.size());
         Assertions.assertEquals( films[2].getAuthor(), filmList.get(0).getAuthor());
         Assertions.assertEquals(films[1].getAuthor(), filmList.get(1).getAuthor());

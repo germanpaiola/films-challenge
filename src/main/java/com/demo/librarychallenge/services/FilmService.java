@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class FilmService {
@@ -35,6 +36,10 @@ public class FilmService {
 
     public void saveToList(Film film){
         Library.getLibrary().getFilms().add(film);
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 
     public void updateFilm(Film film){
@@ -63,15 +68,14 @@ public class FilmService {
         throw new NotFoundException("Film not found for title.");
     }
 
-    public List<Film> getFilm(String title){
+    public List<Film> getFilm(String title, String strict){
 
         List<Film> films = Library.getLibrary().getFilms();
         List<Film> foundFilms = new ArrayList<>();
 
         for(Film film : films){
-            if(film.getTitle().toLowerCase().contains(title)){
+            if(film.getTitle().toLowerCase().contains(title.toLowerCase()) && strict.equals("true") || film.getTitle().equalsIgnoreCase(title)){
                 foundFilms.add(film);
-
             }
         }
         if(foundFilms.size() == 0){
@@ -90,5 +94,16 @@ public class FilmService {
         if(film.getTitle() == null){
             throw new InvalidRequestException("Invalid Request");
         }
+    }
+
+    public List getBooks(RequestService requestService, List<Film> films) {
+        List composed = new ArrayList();
+        composed.addAll(films);
+        for(Film film : films){
+            QueryRequest queryRequest = new QueryRequest();
+            queryRequest.setTitle(film.getTitle());
+            composed.addAll(requestService.request(convertToString(queryRequest)));
+        }
+        return composed;
     }
 }
