@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Library {
 
-    private static List<Book> books;
+    private static List<Film> films;
     private static Library instance;
 
     public static Library getLibrary(){
@@ -17,15 +17,15 @@ public class Library {
         }
     }
 
-    private Library(List<Book> books) {
-        this.books = books;
+    private Library(List<Film> films) {
+        this.films = films;
     }
 
     private static Library getInstance(){
         return instance;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public List<Film> getFilms() {
+        return films;
     }
 }

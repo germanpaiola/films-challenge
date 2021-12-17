@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book {
+public class Film {
 
     private String title;
     private String author;
@@ -30,9 +30,9 @@ public class Book {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Book))
+        if (!(o instanceof Film))
             return false;
-        Book other = (Book) o;
+        Film other = (Film) o;
         return (this.title == null && other.title == null)
                 || (this.title != null && this.title.equals(other.title));
     }
